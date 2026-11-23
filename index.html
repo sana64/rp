@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6 фото 3,5×4,5 на паспорт РФ — лист 10×15</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f2f5f9;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .app {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 25px 40px -12px rgba(0, 20, 40, 0.25);
+            padding: 28px 24px 32px;
+            max-width: 1100px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: #102a43;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        h1 span {
+            background: #0b5e9e;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 40px;
+            letter-spacing: normal;
+        }
+        .subtitle {
+            color: #486581;
+            margin-bottom: 24px;
+            font-size: 1rem;
+            border-left: 4px solid #0b5e9e;
+            padding-left: 16px;
+        }
+        .layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            align-items: flex-start;
+        }
+        .upload-panel {
+            flex: 1 1 320px;
+            min-width: 280px;
+        }
+        .preview-panel {
+            flex: 1 1 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+        .upload-area {
+            background: #f8fafd;
+            border: 2px dashed #b6c9e0;
+            border-radius: 20px;
+            padding: 20px 16px;
+            text-align: center;
+            transition: 0.15s;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+        .upload-area:hover {
+            background: #eef5fe;
+            border-color: #0b5e9e;
+        }
+        .upload-area input[type="file"] {
+            display: none;
+        }
+        .upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .upload-icon {
+            font-size: 40px;
+            line-height: 1;
+        }
+        .upload-text {
+            font-weight: 500;
+            color: #1f3a5f;
+        }
+        .upload-hint {
+            font-size: 0.78rem;
+            color: #627d98;
+        }
+        .file-info {
+            background: #e6f0fa;
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            color: #0b3b5c;
+            margin-bottom: 16px;
+            word-break: break-word;
+            display: none;
+        }
+        .file-info.visible {
+            display: block;
+        }
+
+        .bg-remove-btn {
+            background: #fff;
+            border: 1.5px solid #b6c9e0;
+            border-radius: 60px;
+            color: #0b5e9e;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 12px 18px;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .bg-remove-btn:hover:not(:disabled) {
+            background: #eef5fe;
+            border-color: #0b5e9e;
+        }
+        .bg-remove-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .bg-remove-btn.working {
+            background: #f0f5fb;
+            border-color: #0b5e9e;
+        }
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #b6c9e0;
+            border-top-color: #0b5e9e;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .adjust-panel {
+            background: #f8fafd;
+            border: 1px solid #d9e2ec;
+            border-radius: 20px;
+            padding: 18px 18px 20px;
+            margin-bottom: 18px;
+            display: none;
+        }
+        .adjust-panel.visible {
+            display: block;
+        }
+        .adjust-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1f3a5f;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .control-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .control-row:last-child {
+            margin-bottom: 0;
+        }
+        .control-label {
+            font-size: 0.82rem;
+            color: #486581;
+            min-width: 78px;
+            font-weight: 500;
+        }
+        .control-row input[type="range"] {
+            flex: 1;
+            accent-color: #0b5e9e;
+            height: 6px;
+            cursor: pointer;
+        }
+        .value-badge {
+            font-size: 0.75rem;
+            color: #0b5e9e;
+            background: #e6f0fa;
+            padding: 3px 9px;
+            border-radius: 20px;
+            min-width: 52px;
+            text-align: center;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+        .reset-position-btn {
+            background: white;
+            border: 1px solid #b6c9e0;
+            border-radius: 40px;
+            color: #0b5e9e;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: 0.15s;
+            margin-top: 14px;
+            width: 100%;
+        }
+        .reset-position-btn:hover {
+            background: #eef5fe;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 14px 22px;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: white;
+            color: #0b5e9e;
+            border: 1.5px solid #b6c9e0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+        }
+        .btn-primary {
+            background: #0b5e9e;
+            color: white;
+            border: 1.5px solid #0b5e9e;
+            box-shadow: 0 12px 20px -10px #0b5e9e;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #084c80;
+            transform: scale(1.01);
+        }
+        .btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        .btn-secondary {
+            background: #f0f5fb;
+            border-color: #b6c9e0;
+            color: #1f3a5f;
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background: #e2ecf7;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 16px 28px -12px rgba(0, 0, 0, 0.35);
+            background: white;
+            display: block;
+            width: 100%;
+            max-width: 380px;
+            border: 1px solid #d9e2ec;
+        }
+        .canvas-hint {
+            font-size: 0.85rem;
+            color: #627d98;
+            text-align: center;
+            background: #f8fafd;
+            padding: 8px 14px;
+            border-radius: 40px;
+            display: inline-block;
+        }
+        .badge {
+            background: white;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: #0b5e9e;
+            border: 1px solid #d0ddea;
+        }
+        .row-buttons {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        .footer-links {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.72rem;
+            color: #8fa3b8;
+            line-height: 1.6;
+        }
+        .footer-links a {
+            color: #627d98;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            transition: 0.15s;
+        }
+        .footer-links a:hover {
+            color: #0b5e9e;
+        }
+        .footer-links .disclaimer {
+            margin-top: 8px;
+            font-size: 0.68rem;
+            color: #a0b3c6;
+            font-style: italic;
+        }
+        @media (max-width: 620px) {
+            .app { padding: 20px 16px; }
+            h1 { font-size: 1.4rem; }
+            .btn { padding: 13px 16px; font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <h1>
+        📸 6 фото 3,5×4,5 на паспорт РФ
+        <span>10×15 см</span>
+    </h1>
+    <div class="subtitle">
+        Загрузите вертикальное фото лица, подгоните кадр, при желании удалите фон — получите JPG с шестью дублями 35×45 мм на листе 10×15 см.
+    </div>
+
+    <div class="layout">
+        <div class="upload-panel">
+            <div class="upload-area" id="dropZone">
+                <label for="fileInput" class="upload-label">
+                    <span class="upload-icon">🖼️</span>
+                    <span class="upload-text">Выберите фото или перетащите</span>
+                    <span class="upload-hint">JPG, PNG · вертикальное, лицо</span>
+                </label>
+                <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp">
+            </div>
+
+            <div class="file-info" id="fileInfo"></div>
+
+            <button class="bg-remove-btn" id="removeBgBtn" disabled>
+                ✂️ Удалить фон
+            </button>
+
+            <div class="adjust-panel" id="adjustPanel">
+                <div class="adjust-title">
+                    🎯 Подгонка кадра (лицо по центру)
+                </div>
+
+                <div class="control-row">
+                    <span class="control-label">Масштаб</span>
+                    <input type="range" id="zoomSlider" min="50" max="300" value="100" step="1">
+                    <span class="value-badge" id="zoomValue">100%</span>
+                </div>
+
+                <div class="control-row">
+                    <span class="control-label">Сдвиг ↔</span>
+                    <input type="range" id="offsetXSlider" min="-100" max="100" value="0" step="1">
+                    <span class="value-badge" id="offsetXValue">0</span>
+                </div>
+
+                <div class="control-row">
+                    <span class="control-label">Сдвиг ↕</span>
+                    <input type="range" id="offsetYSlider" min="-100" max="100" value="0" step="1">
+                    <span class="value-badge" id="offsetYValue">0</span>
+                </div>
+
+                <button class="reset-position-btn" id="resetPositionBtn">
+                    ↺ Сбросить позицию
+                </button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn btn-primary" id="downloadBtn" disabled>
+                    ⬇️ Скачать JPG (10×15 см)
+                </button>
+                <div class="row-buttons">
+                    <button class="btn btn-secondary" id="resetBtn" disabled>
+                        🗑️ Сбросить всё
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 18px; font-size: 0.8rem; color: #627d98; border-top: 1px solid #e2e8f0; padding-top: 16px;">
+                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                    <span class="badge">3,5×4,5 см</span> <span>размер одного фото (35×45 мм)</span>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span class="badge">10×15 см</span> <span>лист (300 DPI)</span>
+                </div>
+            </div>
+
+            <!-- Ссылки для чтения -->
+            <div class="footer-links">
+                <div style="margin-bottom: 6px;">
+                    📄 <a href="https://29.мвд.рф/news/item/20333605" target="_blank" rel="noopener noreferrer">Требования к фото на паспорт РФ (УМВД)</a>
+                </div>
+                <div>
+                    ✂️ <a href="https://www.erase.bg" target="_blank" rel="noopener noreferrer">Erase.bg — убрать фон онлайн</a>
+                </div>
+                <div class="disclaimer">
+                    Сайт помогает скомпоновать фото для печати. Итоговое фото должно соответствовать требованиям МВД; редактирование внешности запрещено.
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-panel">
+            <canvas id="previewCanvas" width="1181" height="1772"></canvas>
+            <div class="canvas-hint" id="canvasHint">предпросмотр листа 10×15 см</div>
+        </div>
+    </div>
+</div>
+
+<!-- Библиотека для удаления фона (работает в браузере, локально) -->
+<script type="module">
+    window.__bgRemovalLoaded = false;
+    try {
+        const mod = await import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/+esm');
+        window.__bgRemove = mod.removeBackground;
+        window.__bgRemovalLoaded = true;
+        console.log('✅ Библиотека удаления фона загружена');
+    } catch (e) {
+        console.warn('⚠️ Не удалось загрузить библиотеку удаления фона:', e);
+    }
+    window.dispatchEvent(new Event('bgRemovalReady'));
+</script>
+
+<script>
+    (function(){
+        const DPI = 300;
+        const CM_TO_INCH = 0.393700787;
+        const SHEET_W = Math.round(10 * CM_TO_INCH * DPI);
+        const SHEET_H = Math.round(15 * CM_TO_INCH * DPI);
+
+        const PHOTO_W_CM = 3.5;
+        const PHOTO_H_CM = 4.5;
+        const PHOTO_W = Math.round(PHOTO_W_CM * CM_TO_INCH * DPI);
+        const PHOTO_H = Math.round(PHOTO_H_CM * CM_TO_INCH * DPI);
+
+        const COLS = 2;
+        const ROWS = 3;
+        const GAP_X = Math.round((SHEET_W - COLS * PHOTO_W) / (COLS + 1));
+        const GAP_Y = Math.round((SHEET_H - ROWS * PHOTO_H) / (ROWS + 1));
+
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const fileInfo = document.getElementById('fileInfo');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const removeBgBtn = document.getElementById('removeBgBtn');
+        const canvas = document.getElementById('previewCanvas');
+        const ctx = canvas.getContext('2d');
+        const canvasHint = document.getElementById('canvasHint');
+
+        const adjustPanel = document.getElementById('adjustPanel');
+        const zoomSlider = document.getElementById('zoomSlider');
+        const offsetXSlider = document.getElementById('offsetXSlider');
+        const offsetYSlider = document.getElementById('offsetYSlider');
+        const zoomValue = document.getElementById('zoomValue');
+        const offsetXValue = document.getElementById('offsetXValue');
+        const offsetYValue = document.getElementById('offsetYValue');
+        const resetPositionBtn = document.getElementById('resetPositionBtn');
+
+        let currentImage = null;
+        let currentFileName = '';
+        let isImageReady = false;
+        let bgRemovalAvailable = false;
+        let isProcessingBg = false;
+        let bgRemoved = false;
+
+        let zoom = 100;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        canvas.width = SHEET_W;
+        canvas.height = SHEET_H;
+
+        function drawPlaceholder() {
+            ctx.clearRect(0, 0, SHEET_W, SHEET_H);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, SHEET_W, SHEET_H);
+
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(1, 1, SHEET_W-2, SHEET_H-2);
+
+            ctx.strokeStyle = '#e9eef3';
+            ctx.lineWidth = 1;
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const x = GAP_X + c * (PHOTO_W + GAP_X);
+                    const y = GAP_Y + r * (PHOTO_H + GAP_Y);
+                    ctx.strokeRect(x, y, PHOTO_W, PHOTO_H);
+                }
+            }
+
+            ctx.font = '500 42px "Segoe UI", Roboto, sans-serif';
+            ctx.fillStyle = '#b0c4d9';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Загрузите фото', SHEET_W/2, SHEET_H/2 - 30);
+            ctx.font = '400 28px "Segoe UI", Roboto, sans-serif';
+            ctx.fillStyle = '#cbd5e1';
+            ctx.fillText('6 копий 3,5×4,5 см', SHEET_W/2, SHEET_H/2 + 40);
+            canvasHint.textContent = 'предпросмотр листа 10×15 см';
+        }
+
+        function renderSheet(img) {
+            if (!img) {
+                drawPlaceholder();
+                return;
+            }
+
+            ctx.clearRect(0, 0, SHEET_W, SHEET_H);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, SHEET_W, SHEET_H);
+
+            const imgW = img.width;
+            const imgH = img.height;
+
+            const coverScale = Math.max(PHOTO_W / imgW, PHOTO_H / imgH);
+            const scale = coverScale * (zoom / 100);
+
+            const scaledW = imgW * scale;
+            const scaledH = imgH * scale;
+
+            const shiftX = (offsetX / 100) * PHOTO_W;
+            const shiftY = (offsetY / 100) * PHOTO_H;
+
+            const baseX = (PHOTO_W - scaledW) / 2;
+            const baseY = (PHOTO_H - scaledH) / 2;
+
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const cellX = GAP_X + c * (PHOTO_W + GAP_X);
+                    const cellY = GAP_Y + r * (PHOTO_H + GAP_Y);
+
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(cellX, cellY, PHOTO_W, PHOTO_H);
+                    ctx.clip();
+
+                    const drawX = cellX + baseX + shiftX;
+                    const drawY = cellY + baseY + shiftY;
+
+                    ctx.drawImage(img, drawX, drawY, scaledW, scaledH);
+                    ctx.restore();
+
+                    ctx.strokeStyle = '#d0ddea';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(cellX, cellY, PHOTO_W, PHOTO_H);
+                }
+            }
+
+            ctx.save();
+            ctx.strokeStyle = 'rgba(11, 94, 158, 0.25)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([10, 12]);
+            ctx.beginPath();
+            ctx.moveTo(SHEET_W / 2, 0);
+            ctx.lineTo(SHEET_W / 2, SHEET_H);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, SHEET_H / 2);
+            ctx.lineTo(SHEET_W, SHEET_H / 2);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.strokeStyle = '#b6c9e0';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(1, 1, SHEET_W-2, SHEET_H-2);
+
+            const bgStatus = bgRemoved ? ' · фон удалён' : '';
+            canvasHint.textContent = `6 копий 3,5×4,5 см · масштаб ${zoom}% · сдвиг ${offsetX}, ${offsetY}${bgStatus}`;
+        }
+
+        function redraw() {
+            if (isImageReady && currentImage) {
+                renderSheet(currentImage);
+            }
+        }
+
+        function updateFromSliders() {
+            zoom = parseInt(zoomSlider.value, 10);
+            offsetX = parseInt(offsetXSlider.value, 10);
+            offsetY = parseInt(offsetYSlider.value, 10);
+
+            zoomValue.textContent = zoom + '%';
+            offsetXValue.textContent = offsetX;
+            offsetYValue.textContent = offsetY;
+
+            redraw();
+        }
+
+        function resetPosition() {
+            zoomSlider.value = 100;
+            offsetXSlider.value = 0;
+            offsetYSlider.value = 0;
+            updateFromSliders();
+        }
+
+        function updateBgButtonState() {
+            if (!isImageReady) {
+                removeBgBtn.disabled = true;
+                removeBgBtn.innerHTML = '✂️ Удалить фон';
+                return;
+            }
+            if (isProcessingBg) {
+                removeBgBtn.disabled = true;
+                removeBgBtn.innerHTML = '<span class="spinner"></span> Обработка…';
+                return;
+            }
+            if (!bgRemovalAvailable) {
+                removeBgBtn.disabled = true;
+                removeBgBtn.innerHTML = '✂️ Удалить фон (недоступно)';
+                return;
+            }
+            if (bgRemoved) {
+                removeBgBtn.disabled = false;
+                removeBgBtn.innerHTML = '↺ Вернуть исходное фото';
+                return;
+            }
+            removeBgBtn.disabled = false;
+            removeBgBtn.innerHTML = '✂️ Удалить фон';
+        }
+
+        function handleFile(file) {
+            if (!file) return;
+            if (!file.type.match('image.*')) {
+                alert('Пожалуйста, выберите изображение (JPG, PNG, WebP).');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    currentImage = img;
+                    currentFileName = file.name;
+                    isImageReady = true;
+                    bgRemoved = false;
+
+                    fileInfo.textContent = `✅ ${file.name} · ${img.width}×${img.height} px`;
+                    fileInfo.classList.add('visible');
+
+                    downloadBtn.disabled = false;
+                    resetBtn.disabled = false;
+                    adjustPanel.classList.add('visible');
+
+                    updateBgButtonState();
+                    resetPosition();
+                    redraw();
+                };
+                img.onerror = () => {
+                    alert('Не удалось загрузить изображение. Попробуйте другой файл.');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resetAll() {
+            fileInput.value = '';
+            currentImage = null;
+            currentFileName = '';
+            isImageReady = false;
+            bgRemoved = false;
+            isProcessingBg = false;
+
+            fileInfo.textContent = '';
+            fileInfo.classList.remove('visible');
+            adjustPanel.classList.remove('visible');
+
+            downloadBtn.disabled = true;
+            resetBtn.disabled = true;
+
+            zoomSlider.value = 100;
+            offsetXSlider.value = 0;
+            offsetYSlider.value = 0;
+            zoomValue.textContent = '100%';
+            offsetXValue.textContent = '0';
+            offsetYValue.textContent = '0';
+
+            zoom = 100;
+            offsetX = 0;
+            offsetY = 0;
+
+            updateBgButtonState();
+            drawPlaceholder();
+        }
+
+        async function removeBackground() {
+            if (!currentImage || !bgRemovalAvailable || isProcessingBg) return;
+
+            if (bgRemoved) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        currentImage = img;
+                        bgRemoved = false;
+                        updateBgButtonState();
+                        redraw();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+                return;
+            }
+
+            isProcessingBg = true;
+            updateBgButtonState();
+
+            try {
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = currentImage.width;
+                tempCanvas.height = currentImage.height;
+                const tctx = tempCanvas.getContext('2d');
+                tctx.drawImage(currentImage, 0, 0);
+
+                const blob = await new Promise((resolve) => {
+                    tempCanvas.toBlob(resolve, 'image/png');
+                });
+
+                if (!blob) {
+                    throw new Error('Не удалось подготовить изображение');
+                }
+
+                const resultBlob = await window.__bgRemove(blob, {
+                    progress: (key, current, total) => {
+                        if (total > 0) {
+                            const pct = Math.round((current / total) * 100);
+                            removeBgBtn.innerHTML = `<span class="spinner"></span> ${pct}%`;
+                        }
+                    }
+                });
+
+                const url = URL.createObjectURL(resultBlob);
+                const newImg = new Image();
+                newImg.onload = () => {
+                    currentImage = newImg;
+                    bgRemoved = true;
+                    isProcessingBg = false;
+                    updateBgButtonState();
+                    redraw();
+                    setTimeout(() => URL.revokeObjectURL(url), 1000);
+                };
+                newImg.onerror = () => {
+                    isProcessingBg = false;
+                    updateBgButtonState();
+                    alert('Не удалось обработать результат удаления фона.');
+                    URL.revokeObjectURL(url);
+                };
+                newImg.src = url;
+
+            } catch (err) {
+                console.error('Ошибка удаления фона:', err);
+                isProcessingBg = false;
+                updateBgButtonState();
+                alert('Не удалось удалить фон: ' + (err.message || 'неизвестная ошибка') + '\n\nПроверьте интернет-соединение и попробуйте снова.');
+            }
+        }
+
+        function downloadJpeg() {
+            if (!currentImage) return;
+
+            const exportCanvas = document.createElement('canvas');
+            exportCanvas.width = SHEET_W;
+            exportCanvas.height = SHEET_H;
+            const ectx = exportCanvas.getContext('2d');
+
+            ectx.fillStyle = '#ffffff';
+            ectx.fillRect(0, 0, SHEET_W, SHEET_H);
+
+            const imgW = currentImage.width;
+            const imgH = currentImage.height;
+            const coverScale = Math.max(PHOTO_W / imgW, PHOTO_H / imgH);
+            const scale = coverScale * (zoom / 100);
+            const scaledW = imgW * scale;
+            const scaledH = imgH * scale;
+            const shiftX = (offsetX / 100) * PHOTO_W;
+            const shiftY = (offsetY / 100) * PHOTO_H;
+            const baseX = (PHOTO_W - scaledW) / 2;
+            const baseY = (PHOTO_H - scaledH) / 2;
+
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const cellX = GAP_X + c * (PHOTO_W + GAP_X);
+                    const cellY = GAP_Y + r * (PHOTO_H + GAP_Y);
+
+                    ectx.save();
+                    ectx.beginPath();
+                    ectx.rect(cellX, cellY, PHOTO_W, PHOTO_H);
+                    ectx.clip();
+                    ectx.drawImage(currentImage, cellX + baseX + shiftX, cellY + baseY + shiftY, scaledW, scaledH);
+                    ectx.restore();
+                }
+            }
+
+            const baseName = (currentFileName || 'photo').replace(/\.[^/.]+$/, '') || 'photo';
+            const fileName = `${baseName}_6x35x45_10x15.jpg`;
+
+            exportCanvas.toBlob(function(blob) {
+                if (!blob) {
+                    alert('Не удалось создать JPG. Попробуйте ещё раз или уменьшите фото.');
+                    return;
+                }
+
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+
+                setTimeout(function() {
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                }, 1500);
+            }, 'image/jpeg', 0.95);
+        }
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.background = '#e2ecf7';
+            dropZone.style.borderColor = '#0b5e9e';
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.background = '#f8fafd';
+            dropZone.style.borderColor = '#b6c9e0';
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.background = '#f8fafd';
+            dropZone.style.borderColor = '#b6c9e0';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                handleFile(files[0]);
+            }
+        });
+        dropZone.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'INPUT') {
+                fileInput.click();
+            }
+        });
+
+        zoomSlider.addEventListener('input', updateFromSliders);
+        offsetXSlider.addEventListener('input', updateFromSliders);
+        offsetYSlider.addEventListener('input', updateFromSliders);
+
+        resetPositionBtn.addEventListener('click', resetPosition);
+        removeBgBtn.addEventListener('click', removeBackground);
+
+        downloadBtn.addEventListener('click', downloadJpeg);
+        resetBtn.addEventListener('click', resetAll);
+
+        if (window.__bgRemovalLoaded) {
+            bgRemovalAvailable = true;
+            updateBgButtonState();
+        } else {
+            window.addEventListener('bgRemovalReady', () => {
+                if (window.__bgRemovalLoaded) {
+                    bgRemovalAvailable = true;
+                    updateBgButtonState();
+                }
+            });
+            setTimeout(() => {
+                if (!window.__bgRemovalLoaded) {
+                    bgRemovalAvailable = false;
+                    updateBgButtonState();
+                }
+            }, 10000);
+        }
+
+        drawPlaceholder();
+        updateBgButtonState();
+    })();
+</script>
+</body>
+</html>
